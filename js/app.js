@@ -85,14 +85,31 @@ App.Tools.saveContent = function() {
 }
 
 
+App.Rotator.TimeOut = 5;
+App.Rotator.CurrentTimeOut = 0;
+var timeoutFunction;
 // some jQuery shit
 //$(document).ready(function(){
 function bindEvents()
 {
-	$('p').on('dblclick',
-	    function(){
-	        $(this).attr('contentEditable',true);
+	//alert('binding');
+	$('#speech-content').on('click',function() {
+		$(this).attr('contentEditable',true);
 	});
+
+	// we want to run only one instance of the function
+	timeoutFunction = timeoutFunction || window.setInterval(function() {
+	 	if (App.Rotator.CurrentTimeOut<App.Rotator.TimeOut) {
+	 		App.Rotator.CurrentTimeOut++;
+	 		$('#timeout-counter').text(App.Rotator.TimeOut-App.Rotator.CurrentTimeOut);	
+	 	}
+	 	else {
+	 		App.Rotator.CurrentTimeOut=0;
+	 		$('#timeout-counter').text(App.Rotator.TimeOut-App.Rotator.CurrentTimeOut);	
+	 		App.Router.router.transitionTo('next');
+	 	}
+	}, 1000);
+	
 
 
 
